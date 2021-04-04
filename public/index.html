@@ -6,27 +6,65 @@
     <link rel="stylesheet" href="./assets/style.css">
     <title>Krenovator Hackathon</title>
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/8.3.1/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/8.3.1/firebase-auth.js"></script>
-    <!-- <script defer src="/__/firebase/8.3.1/firebase-database.js"></script> -->
-    <script defer src="/__/firebase/8.3.1/firebase-firestore.js"></script>
-    <!-- <script defer src="/__/firebase/8.3.1/firebase-functions.js"></script>
-    <script defer src="/__/firebase/8.3.1/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/8.3.1/firebase-storage.js"></script>
-    <script defer src="/__/firebase/8.3.1/firebase-analytics.js"></script>
-    <script defer src="/__/firebase/8.3.1/firebase-remote-config.js"></script>
-    <script defer src="/__/firebase/8.3.1/firebase-performance.js"></script> -->
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
 
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-analytics.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-firestore.js"></script>
   </head>
-  <body>
-    <div class="container">
-      <h3>Kita kena makan kfc hehe</h3>
+  <body class="bg-gray-600">
+    <div class="grid place-items-center">
+      <div>
+        <p class="text-9xl text-green-400">Krenovator</p><br>
+        <p class="text-5xl mb-5">Hospitals</p>
+        <div id="data"></div>
+      </div>
     </div>
   </body>
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyD9tTBgRu0hZHadPLLR_-pb1Iils7cPm38",
+      authDomain: "my-first-project-413ed.firebaseapp.com",
+      projectId: "my-first-project-413ed",
+      storageBucket: "my-first-project-413ed.appspot.com",
+      messagingSenderId: "721600183503",
+      appId: "1:721600183503:web:f4534fe21bdf93baf50bba",
+      measurementId: "G-940WVVYTTM"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+
+    var db = firebase.firestore()
+
+    data = document.querySelector("#data")
+
+    db.collection("hospital").onSnapshot((qs) => {
+      if(data.firstChild) {
+        while(data.firstChild) {
+          data.removeChild(data.firstChild)
+        }
+      }
+      qs.forEach( doc => {
+        let spanName = document.createElement('span')
+        let spanBed = document.createElement('span')
+        spanName.classList.add("m-3")
+        spanName.classList.add("text-blue-500")
+        spanName.classList.add("text-xl")
+        spanBed.classList.add("m-3")
+        spanBed.classList.add("text-green-600")
+        spanBed.classList.add("text-xl")
+        let div1 = document.createElement('div')
+        spanName.innerText = doc.data().name
+        spanBed.innerText = `- Bed Available : ${doc.data().bed_availability}`
+        div1.appendChild(spanName)
+        div1.appendChild(spanBed)
+        data.appendChild(div1)
+      })
+    })
+  </script>
 </html>
